@@ -11,6 +11,16 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .httpBasic()
+//                .and()
+//                .csrf().disable()
+//                .authorizeHttpRequests().anyRequest().permitAll();
+//        return http.build();
+//    }
+
     @Bean
     public InMemoryUserDetailsManager userDetailsManager() {
         UserDetails user = User.withDefaultPasswordEncoder()
