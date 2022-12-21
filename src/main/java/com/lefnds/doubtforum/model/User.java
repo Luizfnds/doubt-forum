@@ -23,5 +23,6 @@ public class User {
     private String email;
     @Column(nullable = false)
     private Date birth;
-//    private List<Doubt> doubts;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Doubt> doubts;
 }

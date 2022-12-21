@@ -21,6 +21,9 @@ public class Doubt {
     private String title;
     @Column(nullable = false)
     private String content;
-//    private User author;
-//    private List<Answer> answers;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+    @OneToMany(mappedBy = "doubt", fetch = FetchType.LAZY)
+    private List<Answer> answers;
 }

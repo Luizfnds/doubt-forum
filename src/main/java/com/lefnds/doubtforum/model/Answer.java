@@ -18,5 +18,7 @@ public class Answer {
     private Date answerDate;
     @Column(nullable = false)
     private String content;
-//    private Doubt doubt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doubt_id")
+    private Doubt doubt;
 }
