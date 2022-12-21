@@ -3,6 +3,7 @@ package com.lefnds.doubtforum.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +17,7 @@ public class Doubt {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID doubtId;
     @Column(nullable = false)
-    private Date doubtDate;
+    private LocalDateTime doubtDate;
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
