@@ -1,11 +1,12 @@
 package com.lefnds.doubtforum.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lefnds.doubtforum.enums.RoleName;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.springframework.security.core.GrantedAuthority;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -15,33 +16,31 @@ import java.util.UUID;
 @ToString
 @RequiredArgsConstructor
 @Entity
-@Table(name = "TB_USER")
-public class User {
+@Table(name = "TB_ROLE")
+public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID userId;
-    @Column(nullable = false)
-    private LocalDateTime creationDate;
-    @Column(nullable = false)
-    private String name;
-    @Column(nullable = false)
-    private String email;
-    @Column(nullable = false)
-    private LocalDateTime birth;
+    private UUID roleId;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, unique = true)
+    private RoleName roleName;
     @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "roles")
     @ToString.Exclude
-    private List<Doubt> doubts;
-//    @OneToOne(mappedBy = "user")
-//    private UserDetails userDetails;
+    private List<UserDetails> users;
+
+    @Override
+    public String getAuthority() {
+        return roleName.toString();
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        User user = (User) o;
-        return userId != null && Objects.equals(userId, user.userId);
+        Role role = (Role) o;
+        return roleId != null && Objects.equals(roleId, role.roleId);
     }
 
     @Override
