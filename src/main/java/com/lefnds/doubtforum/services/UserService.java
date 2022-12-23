@@ -2,11 +2,10 @@ package com.lefnds.doubtforum.services;
 
 import com.lefnds.doubtforum.model.User;
 import com.lefnds.doubtforum.repositories.UserRepository;
-import org.hibernate.ObjectNotFoundException;
+import com.lefnds.doubtforum.services.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,8 +15,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public Optional<User> findById(UUID id) {
-        return userRepository.findById(id);
+    public Object findById(UUID id) {
+        Optional<User> user = userRepository.findById(id);
+        return user.orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
 }

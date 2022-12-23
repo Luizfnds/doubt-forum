@@ -18,7 +18,7 @@ public class UserControler {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> findUserById(@PathVariable UUID id) {
-        User user = userService.findById(id).get();
+        User user = (User) userService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
