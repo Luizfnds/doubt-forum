@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -17,9 +18,12 @@ public class UserControler {
     private UserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findUserById(@PathVariable UUID id) {
-        User user = (User) userService.findById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+    public Object findUserById(@PathVariable UUID id) {
+        Optional<User> user = userService.findById(id);
+        if ((user.isEmpty())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(user.get());
     }
 
 }
