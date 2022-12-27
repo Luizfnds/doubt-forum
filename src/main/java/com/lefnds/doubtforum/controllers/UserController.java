@@ -23,10 +23,10 @@ public class UserController {
     private UserService userService;
 
     @GetMapping( "/{id}" )
-    public Object findUserById(@PathVariable UUID id) {
+    public Object findUserById( @PathVariable UUID id ) {
 
-        Optional< User > user = userService.findById(id);
-        if ( ( user.isEmpty() ) ) {
+        Optional< User > user = userService.findById( id );
+        if ( user.isEmpty() ) {
             return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( "User not found ");
         }
         return ResponseEntity.status( HttpStatus.OK ).body( user.get() );
@@ -34,10 +34,12 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity< Page< User >> findAllUsers( @PageableDefault( page = 0 , size = 10 , sort = "userId" , direction = Sort.Direction.ASC ) Pageable pageable) {
+    public ResponseEntity< Page<User> > findAllUsers( @PageableDefault( page = 0 , size = 10 , sort = "userId" , direction = Sort.Direction.ASC ) Pageable pageable ) {
 
-        return ResponseEntity.status( HttpStatus.OK ).body( userService.findAll(pageable) );
+        return ResponseEntity.status( HttpStatus.OK ).body( userService.findAll( pageable ) );
 
     }
+
+
 
 }
