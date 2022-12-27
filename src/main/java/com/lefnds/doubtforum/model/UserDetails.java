@@ -1,23 +1,20 @@
 package com.lefnds.doubtforum.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lefnds.doubtforum.config.security.SecurityConfig;
+import com.lefnds.doubtforum.dtos.UserDto;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.io.Serializable;
+import java.util.*;
 
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
+@Data
 @Entity
 @Table(name = "TB_USER_DETAILS")
-public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
+public class UserDetails implements org.springframework.security.core.userdetails.UserDetails , Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,7 +31,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
             joinColumns = @JoinColumn(name = "userDetailsId"),
             inverseJoinColumns = @JoinColumn(name = "roleId"))
     @ToString.Exclude
-    private List<Role> roles;
+    private List<Role> roles = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -71,16 +68,4 @@ public class UserDetails implements org.springframework.security.core.userdetail
         return true;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        UserDetails that = (UserDetails) o;
-        return userDetailsId != null && Objects.equals(userDetailsId, that.userDetailsId);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }

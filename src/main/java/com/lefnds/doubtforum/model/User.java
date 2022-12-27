@@ -1,22 +1,22 @@
 package com.lefnds.doubtforum.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lefnds.doubtforum.dtos.UserDto;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.Hibernate;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
+@Data
 @Entity
 @Table(name = "TB_USER")
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,19 +33,16 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Doubt> doubts;
+
 //    @OneToOne(mappedBy = "user")
 //    private UserDetails userDetails;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        User user = (User) o;
-        return userId != null && Objects.equals(userId, user.userId);
+    public void fromDto( UserDto userDto ) {
+
+        this.setName( userDto.getName() );
+        this.setEmail( userDto.getEmail() );
+        this.setBirth( userDto.getBirth() );
+
     }
 
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }

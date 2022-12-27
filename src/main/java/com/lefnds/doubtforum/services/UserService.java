@@ -1,7 +1,9 @@
 package com.lefnds.doubtforum.services;
 
+import com.lefnds.doubtforum.dtos.UserDto;
 import com.lefnds.doubtforum.model.User;
 import com.lefnds.doubtforum.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,15 +20,22 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public Optional<User> findById(UUID id) {
+    public Optional<User> findById( UUID id ) {
 
-        return userRepository.findById(id);
+        return userRepository.findById( id );
 
     }
 
-    public Page<User> findAll(Pageable pageable) {
+    public Page<User> findAll( Pageable pageable ) {
 
-        return userRepository.findAll(pageable);
+        return userRepository.findAll( pageable );
+
+    }
+
+    @Transactional
+    public User save( User user ) {
+
+        return userRepository.save( user );
 
     }
 

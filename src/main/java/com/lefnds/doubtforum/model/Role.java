@@ -11,10 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
+@Data
 @Entity
 @Table(name = "TB_ROLE")
 public class Role implements GrantedAuthority {
@@ -35,16 +32,4 @@ public class Role implements GrantedAuthority {
         return roleName.toString();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Role role = (Role) o;
-        return roleId != null && Objects.equals(roleId, role.roleId);
-    }
-
-    @Override
-    public int hashCode() {
-        return getClass().hashCode();
-    }
 }
