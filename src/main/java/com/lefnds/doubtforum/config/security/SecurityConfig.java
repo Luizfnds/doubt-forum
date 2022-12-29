@@ -11,15 +11,15 @@ import org.springframework.security.web.SecurityFilterChain;
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .httpBasic()
-                .and()
-                .csrf().disable()
-                .authorizeHttpRequests().anyRequest().authenticated();
-        return http.build();
-    }
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .httpBasic()
+//                .and()
+//                .csrf().disable()
+//                .authorizeHttpRequests().anyRequest().authenticated();
+//        return http.build();
+//    }
 
 //    @Bean
 //    public InMemoryUserDetailsManager userDetailsManager() {

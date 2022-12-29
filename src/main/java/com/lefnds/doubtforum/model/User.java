@@ -28,6 +28,8 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
+    private String password;
+    @Column(nullable = false)
     private LocalDateTime birth;
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
@@ -42,6 +44,7 @@ public class User implements Serializable {
         this.setName( userDto.getName() );
         this.setEmail( userDto.getEmail() );
         this.setBirth( userDto.getBirth() );
+        this.setPassword( userDto.getPassword() );
 
     }
 
