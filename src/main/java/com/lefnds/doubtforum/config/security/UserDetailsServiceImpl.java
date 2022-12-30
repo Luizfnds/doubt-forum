@@ -24,4 +24,5 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         return new com.lefnds.doubtforum.config.security.UserDetails( user.get() );
     }
+    
 }

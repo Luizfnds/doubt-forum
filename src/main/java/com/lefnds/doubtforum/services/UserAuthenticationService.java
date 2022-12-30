@@ -26,11 +26,21 @@ public class UserAuthenticationService {
 
     }
 
-    public User authorizes(LoginDataDto loginData , String token ) {
+    public boolean verifyToken( String token ) {
+
+        if( !token.isEmpty() && validate(token) ) {
+            return true;
+        } else {
+            throw new InvalidLoginException();
+        }
+
+    }
+
+    public User authenticateUser(LoginDataDto loginData ) {
 
         User user = userRepository.findByEmail( loginData.getEmail() ).orElseThrow( ExistingEmailException::new );
 
-        if( loginData.getPassword().equals( user.getPassword() ) && !token.isEmpty() && validate(token) ) {
+        if( loginData.getPassword().equals( user.getPassword() ) ) {
             return user;
         } else {
             throw new InvalidLoginException();
