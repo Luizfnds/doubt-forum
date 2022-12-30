@@ -31,6 +31,8 @@ public class User implements Serializable {
     private String password;
     @Column(nullable = false)
     private LocalDateTime birth;
+    @Column
+    private String token;
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude

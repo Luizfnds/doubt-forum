@@ -1,9 +1,7 @@
 package com.lefnds.doubtforum.controllers;
 
 import com.lefnds.doubtforum.dtos.UserDto;
-import com.lefnds.doubtforum.model.DadosLogin;
 import com.lefnds.doubtforum.model.User;
-import com.lefnds.doubtforum.services.UserAuthenticationService;
 import com.lefnds.doubtforum.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +24,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserAuthenticationService auth;
 
     @GetMapping( "/{id}" )
     public Object findUserById( @PathVariable UUID id ) {
@@ -57,13 +53,5 @@ public class UserController {
         return ResponseEntity.status( HttpStatus.CREATED ).body( userService.save(user) );
 
     }
-
-    @GetMapping
-    @RequestMapping(value = "/auth")
-    public User AuthTest(@RequestBody DadosLogin dados) {
-        return auth.auth(dados);
-    }
-
-
 
 }
