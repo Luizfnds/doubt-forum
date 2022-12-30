@@ -15,11 +15,10 @@ public class TokenService {
     private static final long expirationTime = 1800000;
     private String key = "key for creation of token";
 
-    public String generateToken() {
+    public String generateToken( User user ) {
 
         return Jwts.builder()
-                .setIssuedAt( new Date( System.currentTimeMillis() ) )
-                .setSubject( "JWT-test" )
+                .setSubject( user.getUserId().toString() )
                 .setExpiration( new Date( System.currentTimeMillis() + expirationTime ) )
                 .signWith( SignatureAlgorithm.HS256 , key )
                 .compact();

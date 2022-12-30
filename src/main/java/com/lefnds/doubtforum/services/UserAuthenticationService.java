@@ -3,11 +3,10 @@ package com.lefnds.doubtforum.services;
 import com.lefnds.doubtforum.exceptions.ExistingEmailException;
 import com.lefnds.doubtforum.exceptions.ExpiredTokenException;
 import com.lefnds.doubtforum.exceptions.InvalidLoginException;
-import com.lefnds.doubtforum.model.DadosLogin;
+import com.lefnds.doubtforum.dtos.LoginDataDto;
 import com.lefnds.doubtforum.model.User;
 import com.lefnds.doubtforum.repositories.UserRepository;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,11 +26,11 @@ public class UserAuthenticationService {
 
     }
 
-    public User authorizes( DadosLogin dados , String token ) {
+    public User authorizes(LoginDataDto loginData , String token ) {
 
-        User user = userRepository.findByEmail( dados.getEmail() ).orElseThrow( ExistingEmailException::new );
+        User user = userRepository.findByEmail( loginData.getEmail() ).orElseThrow( ExistingEmailException::new );
 
-        if( dados.getPassword().equals( user.getPassword() ) && !token.isEmpty() && validate(token) ) {
+        if( loginData.getPassword().equals( user.getPassword() ) && !token.isEmpty() && validate(token) ) {
             return user;
         } else {
             throw new InvalidLoginException();
@@ -41,9 +40,9 @@ public class UserAuthenticationService {
 
     public Boolean validate( String token ) {
 
-        String tratedToken = token.replace( "Bearer " , "" );
+        String treatedToken = token.replace( "Bearer " , "" );
 
-        Claims claims = tokenService.decodeToken( tratedToken );
+        Claims claims = tokenService.decodeToken( treatedToken );
 
         if( claims.getExpiration().before( new Date( System.currentTimeMillis() ) ) ) {
             throw new ExpiredTokenException();

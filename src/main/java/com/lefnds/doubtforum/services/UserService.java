@@ -23,21 +23,29 @@ public class UserService {
     private TokenService tokenService;
 
     public Optional<User> findById( UUID id ) {
+
         return userRepository.findById( id );
+
     }
 
     public Page<User> findAll( Pageable pageable ) {
+
         return userRepository.findAll( pageable );
+
     }
 
     @Transactional
     public User save( User user ) {
+
         return userRepository.save( user );
+
     }
 
     public User registerUser( User user ) {
-        tokenService.generateToken();
+
+        tokenService.generateToken( user );
         return userRepository.save( user );
+
     }
 
 }

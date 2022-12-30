@@ -5,7 +5,6 @@ import com.lefnds.doubtforum.dtos.UserDto;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.UUID;
 @Table(name = "TB_USER")
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,15 +29,10 @@ public class User implements Serializable {
     private String password;
     @Column(nullable = false)
     private LocalDateTime birth;
-    @Column
-    private String token;
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     private List<Doubt> doubts;
-
-//    @OneToOne(mappedBy = "user")
-//    private UserDetails userDetails;
 
     public void fromDto( UserDto userDto ) {
 
