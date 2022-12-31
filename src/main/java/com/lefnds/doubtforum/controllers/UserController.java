@@ -2,6 +2,9 @@ package com.lefnds.doubtforum.controllers;
 
 import com.lefnds.doubtforum.dtos.UserDto;
 import com.lefnds.doubtforum.model.User;
+import com.lefnds.doubtforum.repositories.UserRepository;
+import com.lefnds.doubtforum.services.TokenService;
+import com.lefnds.doubtforum.services.UserAuthenticationService;
 import com.lefnds.doubtforum.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +27,33 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserAuthenticationService userAuthenticationService;
+    @Autowired
+    private TokenService tokenService;
+    @Autowired
+    private UserRepository userRepository;
 
-    @GetMapping( "/{id}" )
-    public Object findUserById( @PathVariable UUID id ) {
+    @GetMapping()
+    public Object getUser( @RequestHeader(name = "Authorization" ) String token ) {
 
-        Optional< User > user = userService.findById( id );
+        if( !userAuthenticationService.verifyToken( token ) ) {
+            return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).body( "Error: Invalid token" );
+        }
+
+        String treatedToken = token.replace("Bearer " , "" );
+
+        Optional<User> user = userRepository.findById( UUID.fromString( tokenService.decodeToken( treatedToken ).getSubject() ) );
+
         if ( user.isEmpty() ) {
             return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( "User not found ");
         }
+
         return ResponseEntity.status( HttpStatus.OK ).body( user.get() );
 
     }
 
-    @GetMapping
+    @GetMapping( "/all" )
     public ResponseEntity< Page<User> > findAllUsers( @PageableDefault( page = 0 , size = 10 , sort = "userId" , direction = Sort.Direction.ASC ) Pageable pageable ) {
 
         return ResponseEntity.status( HttpStatus.OK ).body( userService.findAll( pageable ) );

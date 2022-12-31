@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.WebUtils;
@@ -45,17 +46,5 @@ public class AuthenticationController {
         response.addCookie( cookie );
 
     }
-
-    @GetMapping("/sla")
-    public void authorize(@CookieValue String token ,
-                          ServletRequest request ) {
-
-        if( userAuthenticationService.verifyToken( token ) ) {
-            userService.findById( UUID.fromString( tokenService.decodeToken( token ).getSubject() ) );
-        }
-
-    }
-
-
 
 }
