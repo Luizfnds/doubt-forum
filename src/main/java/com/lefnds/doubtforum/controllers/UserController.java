@@ -1,11 +1,16 @@
 package com.lefnds.doubtforum.controllers;
 
+import com.lefnds.doubtforum.dtos.UserResponseDTO;
+import com.lefnds.doubtforum.model.User;
 import com.lefnds.doubtforum.repositories.UserRepository;
 import com.lefnds.doubtforum.security.auth.TokenService;
 import com.lefnds.doubtforum.security.auth.AuthenticationService;
 import com.lefnds.doubtforum.services.UserService;
+import jakarta.servlet.ServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,29 +26,23 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping
-    public ResponseEntity< String > sayHello() {
-        return ResponseEntity.ok( "hello" );
-    }
+    @GetMapping()
+    public ResponseEntity< UserResponseDTO > getUser( @RequestHeader( "Authorization" ) String token ) {
 
-//    @GetMapping()
-//    public Object getUser( @RequestHeader( name = "Authorization" ) String token ) {
-//
-//        if( !userAuthenticationService.verifyToken( token ) ) {
-//            return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).body( "Error: Invalid token" );
-//        }
-//
-//        String treatedToken = token.replace("Bearer " , "" );
-//
-//        Optional<User> user = userRepository.findById( UUID.fromString( tokenService.decodeToken( treatedToken ).getSubject() ) );
-//
-//        if ( user.isEmpty() ) {
-//            return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( "User not found ");
-//        }
-//
-//        return ResponseEntity.status( HttpStatus.OK ).body( user.get() );
-//
-//    }
+        String username = tokenService.decodeToken( token ).getSubject();
+        User user = userRepository.findByEmail( username )
+                .orElseThrow();
+
+        UserResponseDTO userResponseDTO = UserResponseDTO.builder()
+                .name( user.getName() )
+                .email( user.getEmail() )
+                .birth( user.getBirth() )
+                .doubts( user.getDoubts() )
+                .build();
+
+        return ResponseEntity.status( HttpStatus.OK ).body( userResponseDTO );
+
+    }
 
 //    @PostMapping
 //    public Object createUser( @RequestBody @Valid UserDto userDto ) {

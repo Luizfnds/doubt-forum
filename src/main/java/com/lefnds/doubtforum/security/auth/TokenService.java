@@ -30,10 +30,12 @@ public class TokenService {
 
     public Claims decodeToken( String token ) {
 
+        String treatedToken = token.replace( "Bearer " , "" );
+
         return Jwts
                 .parser()
                 .setSigningKey( SECRET_KEY )
-                .parseClaimsJws( token )
+                .parseClaimsJws( treatedToken )
                 .getBody();
 
     }
