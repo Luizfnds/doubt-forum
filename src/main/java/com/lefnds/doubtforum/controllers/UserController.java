@@ -1,16 +1,16 @@
 package com.lefnds.doubtforum.controllers;
 
+import com.lefnds.doubtforum.dtos.UserRequestDTO;
 import com.lefnds.doubtforum.dtos.UserResponseDTO;
 import com.lefnds.doubtforum.model.User;
 import com.lefnds.doubtforum.repositories.UserRepository;
 import com.lefnds.doubtforum.security.auth.TokenService;
 import com.lefnds.doubtforum.security.auth.AuthenticationService;
 import com.lefnds.doubtforum.services.UserService;
-import jakarta.servlet.ServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,9 +25,11 @@ public class UserController {
     private TokenService tokenService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping()
-    public ResponseEntity< UserResponseDTO > getUser( @RequestHeader( "Authorization" ) String token ) {
+    public ResponseEntity<UserResponseDTO> getUser( @RequestHeader( "Authorization" ) String token ) {
 
         String username = tokenService.decodeToken( token ).getSubject();
         User user = userRepository.findByEmail( username )
@@ -44,16 +46,23 @@ public class UserController {
 
     }
 
-//    @PostMapping
-//    public Object createUser( @RequestBody @Valid UserDto userDto ) {
-//
-//        User user = new User();
-//        user.fromDto( userDto );
-//        user.setCreationDate( LocalDateTime.now( ZoneId.of( "UTC" ) ) );
-//
-//        return ResponseEntity.status( HttpStatus.CREATED ).body( userService.save(user) );
-//
-//    }
+    @PutMapping
+    public ResponseEntity< Void > alterUserData( @RequestHeader( "Authorization" ) String token ,
+                                                 @RequestBody UserRequestDTO userRequestDTO ) {
+
+        String username = tokenService.decodeToken( token ).getSubject();
+        User user = userRepository.findByEmail( username )
+                .orElseThrow();
+
+        user.setName( userRequestDTO.getName() );
+        user.setBirth( userRequestDTO.getBirth() );
+        user.setPassword( passwordEncoder.encode( userRequestDTO.getPassword() ) );
+
+        userService.save( user );
+
+        return ResponseEntity.status( HttpStatus.OK ).build();
+
+    }
 
 //    @GetMapping( "/all" )
 //    public ResponseEntity< Page<User> > findAllUsers( @PageableDefault( page = 0 , size = 10 , sort = "userId" , direction = Sort.Direction.ASC ) Pageable pageable ) {

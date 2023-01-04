@@ -1,5 +1,4 @@
-package com.lefnds.doubtforum.security.auth.dtos;
-
+package com.lefnds.doubtforum.dtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -16,13 +15,10 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequestDTO {
+public class UserRequestDTO {
 
     @NotBlank
     private String name;
-    @Email
-    @NotBlank
-    private String email;
     @NotNull
     private LocalDateTime birth;
     @Size(min = 4)
