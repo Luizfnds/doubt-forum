@@ -1,6 +1,6 @@
-package com.lefnds.doubtforum.config;
+package com.lefnds.doubtforum.security.auth;
 
-import com.lefnds.doubtforum.exceptions.ExpiredTokenException;
+import com.lefnds.doubtforum.security.auth.exceptions.ExpiredTokenException;
 import com.lefnds.doubtforum.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

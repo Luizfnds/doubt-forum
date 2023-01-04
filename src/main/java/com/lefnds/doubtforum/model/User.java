@@ -1,7 +1,6 @@
 package com.lefnds.doubtforum.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.lefnds.doubtforum.dtos.UserDto;
 import com.lefnds.doubtforum.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;

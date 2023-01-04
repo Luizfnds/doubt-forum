@@ -1,15 +1,14 @@
-package com.lefnds.doubtforum.auth;
+package com.lefnds.doubtforum.security.auth;
 
-import com.lefnds.doubtforum.auth.exceptions.EmailAlreadyInUseException;
-import com.lefnds.doubtforum.config.TokenService;
-import com.lefnds.doubtforum.dtos.LoginDataDto;
-import com.lefnds.doubtforum.dtos.UserDto;
+import com.lefnds.doubtforum.security.auth.dtos.AuthenticationResponseDTO;
+import com.lefnds.doubtforum.security.auth.exceptions.EmailAlreadyInUseException;
+import com.lefnds.doubtforum.security.auth.dtos.LoginRequestDTO;
+import com.lefnds.doubtforum.security.auth.dtos.RegisterRequestDTO;
 import com.lefnds.doubtforum.enums.Role;
 import com.lefnds.doubtforum.model.User;
 import com.lefnds.doubtforum.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,7 @@ public class AuthenticationService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse registry( UserDto userDto ) {
+    public AuthenticationResponseDTO registry(RegisterRequestDTO userDto ) {
 
         if( userRepository.findByEmail( userDto.getEmail() ).isPresent() ) {
             throw new EmailAlreadyInUseException();
@@ -48,13 +47,13 @@ public class AuthenticationService {
 
         String token = tokenService.generateToken( user );
 
-        return AuthenticationResponse.builder()
+        return AuthenticationResponseDTO.builder()
                 .token( token )
                 .build();
 
     }
 
-    public AuthenticationResponse authenticate( LoginDataDto loginDataDto ) {
+    public AuthenticationResponseDTO authenticate(LoginRequestDTO loginDataDto ) {
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 loginDataDto.getEmail() , loginDataDto.getPassword()
@@ -67,7 +66,7 @@ public class AuthenticationService {
 
         String token = tokenService.generateToken( user );
 
-        return AuthenticationResponse.builder()
+        return AuthenticationResponseDTO.builder()
                 .token( token )
                 .build();
 

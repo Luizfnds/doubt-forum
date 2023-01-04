@@ -1,6 +1,6 @@
 package com.lefnds.doubtforum.services;
 
-import com.lefnds.doubtforum.config.TokenService;
+import com.lefnds.doubtforum.security.auth.TokenService;
 import com.lefnds.doubtforum.model.User;
 import com.lefnds.doubtforum.repositories.UserRepository;
 import jakarta.transaction.Transactional;

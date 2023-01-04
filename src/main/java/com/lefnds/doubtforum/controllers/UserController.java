@@ -1,8 +1,8 @@
 package com.lefnds.doubtforum.controllers;
 
 import com.lefnds.doubtforum.repositories.UserRepository;
-import com.lefnds.doubtforum.config.TokenService;
-import com.lefnds.doubtforum.auth.AuthenticationService;
+import com.lefnds.doubtforum.security.auth.TokenService;
+import com.lefnds.doubtforum.security.auth.AuthenticationService;
 import com.lefnds.doubtforum.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

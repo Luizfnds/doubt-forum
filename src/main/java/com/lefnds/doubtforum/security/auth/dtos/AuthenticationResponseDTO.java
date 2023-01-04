@@ -1,4 +1,4 @@
-package com.lefnds.doubtforum.auth;
+package com.lefnds.doubtforum.security.auth.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AuthenticationResponse {
+public class AuthenticationResponseDTO {
 
     private String token;
 

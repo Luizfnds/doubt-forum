@@ -1,6 +1,6 @@
-package com.lefnds.doubtforum.config;
+package com.lefnds.doubtforum.security;
 
-import com.lefnds.doubtforum.auth.AuthenticationFilter;
+import com.lefnds.doubtforum.security.auth.AuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

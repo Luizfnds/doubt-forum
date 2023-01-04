@@ -1,4 +1,4 @@
-package com.lefnds.doubtforum.config;
+package com.lefnds.doubtforum.security.auth;
 
 import com.lefnds.doubtforum.model.User;
 import com.lefnds.doubtforum.repositories.UserRepository;
