@@ -7,6 +7,7 @@ import com.lefnds.doubtforum.repositories.UserRepository;
 import com.lefnds.doubtforum.security.auth.TokenService;
 import com.lefnds.doubtforum.security.auth.AuthenticationService;
 import com.lefnds.doubtforum.services.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,7 @@ public class UserController {
     }
 
     @PutMapping
+    @Transactional
     public ResponseEntity< Void > alterUserData( @RequestHeader( "Authorization" ) String token ,
                                                  @RequestBody UserRequestDTO userRequestDTO ) {
 
@@ -59,6 +61,20 @@ public class UserController {
         user.setPassword( passwordEncoder.encode( userRequestDTO.getPassword() ) );
 
         userService.save( user );
+
+        return ResponseEntity.status( HttpStatus.OK ).build();
+
+    }
+
+    @DeleteMapping
+    @Transactional
+    public ResponseEntity< Void > deleteUser( @RequestHeader( "Authorization" ) String token ) {
+
+        String username = tokenService.decodeToken( token ).getSubject();
+        User user = userRepository.findByEmail( username )
+                .orElseThrow();
+
+        userService.delete( user );
 
         return ResponseEntity.status( HttpStatus.OK ).build();
 

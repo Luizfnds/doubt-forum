@@ -5,8 +5,6 @@ import com.lefnds.doubtforum.model.User;
 import com.lefnds.doubtforum.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -26,12 +24,6 @@ public class UserService {
 
     }
 
-    public Page<User> findAll( Pageable pageable ) {
-
-        return userRepository.findAll( pageable );
-
-    }
-
     @Transactional
     public User save( User user ) {
 
@@ -39,11 +31,13 @@ public class UserService {
 
     }
 
-    public User registerUser( User user ) {
+    @Transactional
+    public void delete(User user ) {
 
-        tokenService.generateToken( user );
-        return userRepository.save( user );
+        userRepository.delete( user );
 
     }
+
+
 
 }
