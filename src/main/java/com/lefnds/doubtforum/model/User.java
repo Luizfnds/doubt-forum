@@ -2,19 +2,23 @@ package com.lefnds.doubtforum.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lefnds.doubtforum.dtos.UserDto;
+import com.lefnds.doubtforum.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "TB_USER")
-public class User implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,23 +28,52 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private String email;
-    @Column(nullable = false)
-    private String password;
-    @Column(nullable = false)
     private LocalDateTime birth;
     @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany( mappedBy = "user" , fetch = FetchType.LAZY )
     @ToString.Exclude
     private List<Doubt> doubts;
 
-    public void fromDto( UserDto userDto ) {
+    @Column(nullable = false, unique = true)
+    private String email;
+    @Column(nullable = false)
+    private String password;
+    @Enumerated( EnumType.STRING )
+    private Role role;
 
-        this.setName( userDto.getName() );
-        this.setEmail( userDto.getEmail() );
-        this.setBirth( userDto.getBirth() );
-        this.setPassword( userDto.getPassword() );
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of( new SimpleGrantedAuthority( this.role.name() ) );
+    }
 
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
 }

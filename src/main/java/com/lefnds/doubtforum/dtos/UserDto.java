@@ -11,7 +11,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Data
-public class UserDto {
+public class  UserDto {
 
     @NotBlank
     private String name;
@@ -20,8 +20,6 @@ public class UserDto {
     private String email;
     @NotNull
     private LocalDateTime birth;
-    @NotBlank
-    private String username;
     @NotBlank
     @Size(min = 4)
     private String password;
