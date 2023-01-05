@@ -62,4 +62,10 @@ public class TokenService {
 
     }
 
+    public String getSubject( String token ) {
+
+        return decodeToken( token ).getSubject();
+
+    }
+
 }

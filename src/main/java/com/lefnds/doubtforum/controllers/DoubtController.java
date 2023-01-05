@@ -80,4 +80,39 @@ public class DoubtController {
 
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity< Object > alterDoubt( @RequestHeader( "Authorization" ) String token ,
+                                                 @PathVariable UUID id ,
+                                                 @RequestBody @Valid DoubtRequestDTO doubtRequestDTO ) {
+
+        Doubt doubt = doubtService.getOne( id )
+                .orElseThrow();
+
+        User user = userRepository.findByEmail( tokenService.getSubject( token ) )
+                .orElseThrow();
+
+        List< UUID > doubtList = user.getDoubts().stream()
+                .map( Doubt::getDoubtId )
+                .filter( (u) -> u.equals( doubt.getDoubtId() ) )
+                .toList();
+
+        if( doubtList.isEmpty() ) {
+            return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).body( "This doubt does not belong to the logged in user." );
+        }
+
+        doubt.setTitle( doubtRequestDTO.getTitle() );
+        doubt.setContent( doubtRequestDTO.getContent() );
+
+        doubtService.save( doubt );
+
+        return ResponseEntity.status( HttpStatus.OK ).body( doubtResponseDTO.createDoubtResponseDTO( doubt ) );
+
+    }
+
+//    @DeleteMapping
+//    public ResponseEntity< String > getOneDoubt(  ) {
+//
+//
+//    }
+
 }
