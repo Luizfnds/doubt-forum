@@ -22,7 +22,7 @@ public class AnswerResponseDTO {
     private String nameOfUser;
     private String content;
 
-    public AnswerResponseDTO createAnswerResponseDTO( Answer answer ) {
+    public static AnswerResponseDTO createAnswerResponseDTO( Answer answer ) {
 
         return AnswerResponseDTO.builder()
                 .answerId( answer.getAnswerId() )

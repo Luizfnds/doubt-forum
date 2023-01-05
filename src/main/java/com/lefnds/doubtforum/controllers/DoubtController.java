@@ -32,19 +32,16 @@ public class DoubtController {
     private TokenService tokenService;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private DoubtResponseDTO doubtResponseDTO;
+
 
     @GetMapping
     public ResponseEntity< Page<DoubtResponseDTO> > getAllDoubts( @PageableDefault( page = 0 , size = 5 , sort = "doubtDate" , direction = Sort.Direction.DESC ) Pageable pageable) {
 
         List< DoubtResponseDTO > doubtDtoList = doubtService.getAll( pageable )
-                .stream().map( ( doubt ) -> { return doubtResponseDTO.createDoubtResponseDTO( doubt ); })
+                .stream().map( DoubtResponseDTO::createDoubtResponseDTO )
                 .toList();
 
-        Page< DoubtResponseDTO > page = new PageImpl<>( doubtDtoList );
-
-        return ResponseEntity.status( HttpStatus.OK ).body( page );
+        return ResponseEntity.status( HttpStatus.OK ).body( new PageImpl<>( doubtDtoList ) );
 
     }
 
@@ -54,7 +51,7 @@ public class DoubtController {
         Doubt doubt = doubtService.getOne( id )
                 .orElseThrow();
 
-        return ResponseEntity.status( HttpStatus.OK ).body( doubtResponseDTO.createDoubtResponseDTO( doubt ) );
+        return ResponseEntity.status( HttpStatus.OK ).body( DoubtResponseDTO.createDoubtResponseDTO( doubt ) );
 
     }
 
@@ -62,8 +59,7 @@ public class DoubtController {
     public ResponseEntity< DoubtResponseDTO > createDoubt( @RequestHeader( "Authorization" ) String token ,
                                                            @RequestBody @Valid DoubtRequestDTO doubtRequestDTO ) {
 
-        String username = tokenService.decodeToken( token ).getSubject();
-        User user = userRepository.findByEmail( username )
+        User user = userRepository.findByEmail( tokenService.decodeToken( token ).getSubject() )
                 .orElseThrow();
 
         Doubt doubt = doubtService.save( Doubt.builder()
@@ -75,7 +71,7 @@ public class DoubtController {
                 .build()
         );
 
-        return ResponseEntity.status( HttpStatus.CREATED ).body( doubtResponseDTO.createDoubtResponseDTO( doubt ) );
+        return ResponseEntity.status( HttpStatus.CREATED ).body( DoubtResponseDTO.createDoubtResponseDTO( doubt ) );
 
     }
 
@@ -104,7 +100,7 @@ public class DoubtController {
 
         doubtService.save( doubt );
 
-        return ResponseEntity.status( HttpStatus.OK ).body( doubtResponseDTO.createDoubtResponseDTO( doubt ) );
+        return ResponseEntity.status( HttpStatus.OK ).body( DoubtResponseDTO.createDoubtResponseDTO( doubt ) );
 
     }
 

@@ -7,7 +7,6 @@ import com.lefnds.doubtforum.model.User;
 import com.lefnds.doubtforum.repositories.UserRepository;
 import com.lefnds.doubtforum.security.auth.TokenService;
 import com.lefnds.doubtforum.services.UserService;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,59 +26,41 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private DoubtResponseDTO doubtResponseDTO;
 
     @GetMapping
     public ResponseEntity< UserResponseDTO > getUser( @RequestHeader( "Authorization" ) String token ) {
 
-        String username = tokenService.decodeToken( token ).getSubject();
-        User user = userRepository.findByEmail( username )
+        User user = userRepository.findByEmail( tokenService.getSubject( token ) )
                 .orElseThrow();
 
-        UserResponseDTO userResponseDTO = UserResponseDTO.builder()
-                .name( user.getName() )
-                .email( user.getEmail() )
-                .birth( user.getBirth() )
-                .doubts( user.getDoubts().stream()
-                        .map( (d) -> { return doubtResponseDTO.createDoubtResponseDTO( d ); } )
-                        .toList())
-                .build();
-
-        return ResponseEntity.status( HttpStatus.OK ).body( userResponseDTO );
+        return ResponseEntity.status( HttpStatus.OK ).body( UserResponseDTO.createUserResponseDTO( user ) );
 
     }
 
     @PutMapping
-    @Transactional
-    public ResponseEntity< Void > alterUserData( @RequestHeader( "Authorization" ) String token ,
-                                                 @RequestBody @Valid UserRequestDTO userRequestDTO ) {
+    public ResponseEntity< UserResponseDTO > alterUserData( @RequestHeader( "Authorization" ) String token ,
+                                                            @RequestBody @Valid UserRequestDTO userRequestDTO ) {
 
-        String username = tokenService.decodeToken( token ).getSubject();
-        User user = userRepository.findByEmail( username )
+        User user = userRepository.findByEmail( tokenService.getSubject( token ) )
                 .orElseThrow();
 
         user.setName( userRequestDTO.getName() );
         user.setBirth( userRequestDTO.getBirth() );
         user.setPassword( passwordEncoder.encode( userRequestDTO.getPassword() ) );
 
-        userService.save( user );
-
-        return ResponseEntity.status( HttpStatus.OK ).build();
+        return ResponseEntity.status( HttpStatus.OK ).body( UserResponseDTO.createUserResponseDTO( userService.save( user ) ) );
 
     }
 
     @DeleteMapping
-    @Transactional
-    public ResponseEntity< Void > deleteUser( @RequestHeader( "Authorization" ) String token ) {
+    public ResponseEntity< String > deleteUser( @RequestHeader( "Authorization" ) String token ) {
 
-        String username = tokenService.decodeToken( token ).getSubject();
-        User user = userRepository.findByEmail( username )
+        User user = userRepository.findByEmail( tokenService.getSubject( token ) )
                 .orElseThrow();
 
         userService.delete( user );
 
-        return ResponseEntity.status( HttpStatus.OK ).build();
+        return ResponseEntity.status( HttpStatus.OK ).body( "Deleted with success" );
 
     }
 

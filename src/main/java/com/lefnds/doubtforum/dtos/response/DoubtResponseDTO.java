@@ -16,10 +16,6 @@ import java.util.UUID;
 @Component
 public class DoubtResponseDTO {
 
-    @Autowired
-    @Getter(AccessLevel.NONE)
-    private AnswerResponseDTO answerResponseDTO;
-
     private UUID doubtId;
     private LocalDateTime doubtDate;
     private String nameOfUser;
@@ -27,7 +23,7 @@ public class DoubtResponseDTO {
     private String content;
     private List<AnswerResponseDTO> answers;
 
-    public DoubtResponseDTO createDoubtResponseDTO( Doubt doubt ) {
+    public static DoubtResponseDTO createDoubtResponseDTO( Doubt doubt ) {
 
         return DoubtResponseDTO.builder()
                 .doubtId( doubt.getDoubtId() )
@@ -36,7 +32,7 @@ public class DoubtResponseDTO {
                 .title( doubt.getTitle() )
                 .content( doubt.getContent() )
                 .answers( doubt.getAnswers().stream()
-                        .map( ( d ) -> { return answerResponseDTO.createAnswerResponseDTO( d ); })
+                        .map( AnswerResponseDTO::createAnswerResponseDTO )
                         .toList() )
                 .build();
 

@@ -37,14 +37,12 @@ public class AnswerController {
     private TokenService tokenService;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private AnswerResponseDTO answerResponseDTO;
 
     @GetMapping
     public ResponseEntity< Page< AnswerResponseDTO > > getAllAnswers( @PageableDefault( page = 0 , size = 10 , sort = "answerDate" , direction = Sort.Direction.DESC ) Pageable pageable ) {
 
         List< AnswerResponseDTO > answerDtoList = answerService.getAll( pageable )
-                .stream().map( ( answer ) -> { return answerResponseDTO.createAnswerResponseDTO( answer ); })
+                .stream().map( AnswerResponseDTO::createAnswerResponseDTO )
                 .toList();
 
         Page< AnswerResponseDTO > page = new PageImpl<>( answerDtoList );
@@ -59,7 +57,7 @@ public class AnswerController {
         Answer answer = answerService.getOne( id )
                 .orElseThrow();
 
-        return ResponseEntity.status( HttpStatus.OK ).body( answerResponseDTO.createAnswerResponseDTO( answer ) );
+        return ResponseEntity.status( HttpStatus.OK ).body( AnswerResponseDTO.createAnswerResponseDTO( answer ) );
 
     }
 
@@ -81,7 +79,7 @@ public class AnswerController {
                         .content( answerRequestDTO.getContent() )
                         .build());
 
-        return ResponseEntity.status( HttpStatus.CREATED ).body( answerResponseDTO.createAnswerResponseDTO( answer ) );
+        return ResponseEntity.status( HttpStatus.CREATED ).body( AnswerResponseDTO.createAnswerResponseDTO( answer ) );
 
     }
 
@@ -109,7 +107,7 @@ public class AnswerController {
 
         answerService.save( answer );
 
-        return ResponseEntity.status( HttpStatus.OK ).body( answerResponseDTO.createAnswerResponseDTO( answer ) );
+        return ResponseEntity.status( HttpStatus.OK ).body( AnswerResponseDTO.createAnswerResponseDTO( answer ) );
 
     }
 
