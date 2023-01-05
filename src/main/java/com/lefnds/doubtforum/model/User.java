@@ -30,8 +30,10 @@ public class User implements UserDetails {
     private LocalDateTime birth;
     @JsonIgnore
     @OneToMany( mappedBy = "user" , fetch = FetchType.LAZY )
-    @ToString.Exclude
     private List<Doubt> doubts;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Answer> answers;
 
     @Column(nullable = false, unique = true)
     private String email;

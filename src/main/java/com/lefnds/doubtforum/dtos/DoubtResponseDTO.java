@@ -1,18 +1,11 @@
 package com.lefnds.doubtforum.dtos;
 
-import com.lefnds.doubtforum.model.Answer;
 import com.lefnds.doubtforum.model.Doubt;
-import com.lefnds.doubtforum.model.User;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,12 +16,16 @@ import java.util.UUID;
 @Component
 public class DoubtResponseDTO {
 
+    @Autowired
+    @Getter(AccessLevel.NONE)
+    private AnswerResponseDTO answerResponseDTO;
+
     private UUID doubtId;
     private LocalDateTime doubtDate;
     private String nameOfUser;
     private String title;
     private String content;
-    private List<Answer> answers;
+    private List<AnswerResponseDTO> answers;
 
     public DoubtResponseDTO createDoubtResponseDTO( Doubt doubt ) {
 
@@ -38,7 +35,9 @@ public class DoubtResponseDTO {
                 .nameOfUser( doubt.getUser().getName() )
                 .title( doubt.getTitle() )
                 .content( doubt.getContent() )
-                .answers( doubt.getAnswers() )
+                .answers( doubt.getAnswers().stream()
+                        .map( ( d ) -> { return answerResponseDTO.createAnswerResponseDTO( d ); })
+                        .toList() )
                 .build();
 
     }

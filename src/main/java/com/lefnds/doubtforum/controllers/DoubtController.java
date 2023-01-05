@@ -74,9 +74,10 @@ public class DoubtController {
                 .title( doubtRequestDTO.getTitle() )
                 .content( doubtRequestDTO.getContent() )
                 .answers( new ArrayList<>() )
-                .build() );
+                .build()
+        );
 
-        return ResponseEntity.status( HttpStatus.OK ).body( doubtResponseDTO.createDoubtResponseDTO( doubt ) );
+        return ResponseEntity.status( HttpStatus.CREATED ).body( doubtResponseDTO.createDoubtResponseDTO( doubt ) );
 
     }
 

@@ -16,6 +16,6 @@ public class UserResponseDTO {
     private String name;
     private String email;
     private LocalDateTime birth;
-    private List< Doubt > doubts;
+    private List< DoubtResponseDTO > doubts;
 
 }
