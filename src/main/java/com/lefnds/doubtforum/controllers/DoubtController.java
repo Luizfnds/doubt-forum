@@ -92,12 +92,12 @@ public class DoubtController {
         User user = userRepository.findByEmail( tokenService.getSubject( token ) )
                 .orElseThrow();
 
-        List< UUID > doubtList = user.getDoubts().stream()
+        boolean containsDoubtId = user.getDoubts().stream()
                 .map( Doubt::getDoubtId )
-                .filter( (u) -> u.equals( doubt.getDoubtId() ) )
-                .toList();
+                .toList()
+                .contains( id );
 
-        if( doubtList.isEmpty() ) {
+        if( !containsDoubtId ) {
             return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).body( "This doubt does not belong to the logged in user." );
         }
 
@@ -120,12 +120,12 @@ public class DoubtController {
         User user = userRepository.findByEmail( tokenService.getSubject( token ) )
                 .orElseThrow();
 
-        List< UUID > doubtList = user.getDoubts().stream()
+        boolean containsDoubtId = user.getDoubts().stream()
                 .map( Doubt::getDoubtId )
-                .filter( (u) -> u.equals( doubt.getDoubtId() ) )
-                .toList();
+                .toList()
+                .contains( id );
 
-        if( doubtList.isEmpty() ) {
+        if( !containsDoubtId ) {
             return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).body( "This doubt does not belong to the logged in user." );
         }
 
