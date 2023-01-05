@@ -30,8 +30,6 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private AuthenticationService userAuthenticationService;
-    @Autowired
     private TokenService tokenService;
     @Autowired
     private UserRepository userRepository;
@@ -39,7 +37,7 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping
-    public ResponseEntity<UserResponseDTO> getUser( @RequestHeader( "Authorization" ) String token ) {
+    public ResponseEntity< UserResponseDTO > getUser( @RequestHeader( "Authorization" ) String token ) {
 
         String username = tokenService.decodeToken( token ).getSubject();
         User user = userRepository.findByEmail( username )

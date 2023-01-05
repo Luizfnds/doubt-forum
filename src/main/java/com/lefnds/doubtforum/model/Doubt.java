@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,6 +32,6 @@ public class Doubt {
     @JoinColumn(name = "user_id")
     private User user;
     @OneToMany(mappedBy = "doubt", fetch = FetchType.LAZY)
-    private List<Answer> answers;
+    private List<Answer> answers = new ArrayList<>();
 
 }
