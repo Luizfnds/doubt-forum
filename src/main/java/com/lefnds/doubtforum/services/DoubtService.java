@@ -36,4 +36,11 @@ public class DoubtService {
 
     }
 
+    @Transactional
+    public void delete( Doubt doubt ) {
+
+        doubtRepository.delete( doubt );
+
+    }
+
 }
