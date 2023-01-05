@@ -43,19 +43,19 @@ public class AnswerController {
     @Autowired
     private AnswerResponseDTO answerResponseDTO;
 
-//    @GetMapping
-//    public ResponseEntity<Page<DoubtResponseDTO>> getAllDoubts(@PageableDefault( page = 0 , size = 5 , sort = "doubtDate" , direction = Sort.Direction.DESC ) Pageable pageable) {
-//
-//        List< DoubtResponseDTO > doubtDtoList = doubtService.getAll( pageable )
-//                .stream().map( ( doubt ) -> { return doubtResponseDTO.createDoubtResponseDTO( doubt ); })
-//                .toList();
-//
-//        Page< DoubtResponseDTO > page = new PageImpl<>( doubtDtoList );
-//
-//        return ResponseEntity.status( HttpStatus.OK ).body( page );
-//
-//    }
-//
+    @GetMapping
+    public ResponseEntity< Page< AnswerResponseDTO > > getAllAnswers( @PageableDefault( page = 0 , size = 10 , sort = "answerDate" , direction = Sort.Direction.DESC ) Pageable pageable ) {
+
+        List< AnswerResponseDTO > answerDtoList = answerService.getAll( pageable )
+                .stream().map( ( answer ) -> { return answerResponseDTO.createAnswerResponseDTO( answer ); })
+                .toList();
+
+        Page< AnswerResponseDTO > page = new PageImpl<>( answerDtoList );
+
+        return ResponseEntity.status( HttpStatus.OK ).body( page );
+
+    }
+
 //    @GetMapping("/{id}")
 //    public ResponseEntity< DoubtResponseDTO > getOneDoubt( @PathVariable UUID id ) {
 //

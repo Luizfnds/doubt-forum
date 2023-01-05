@@ -19,11 +19,11 @@ public class AnswerService {
     @Autowired
     private AnswerRepository answerRepository;
 
-//    public Page<Answer> getAll(Pageable pageable ) {
-//
-//        return answerRepository.findAll( pageable );
-//
-//    }
+    public Page<Answer> getAll(Pageable pageable ) {
+
+        return answerRepository.findAll( pageable );
+
+    }
 
     public Optional< Answer > getOne( UUID id ) {
 
