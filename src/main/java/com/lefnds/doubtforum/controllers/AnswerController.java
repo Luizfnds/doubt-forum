@@ -56,16 +56,16 @@ public class AnswerController {
 
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity< DoubtResponseDTO > getOneDoubt( @PathVariable UUID id ) {
-//
-//        Doubt doubt = doubtService.getOne( id )
-//                .orElseThrow();
-//
-//        return ResponseEntity.status( HttpStatus.OK ).body( doubtResponseDTO.createDoubtResponseDTO( doubt ) );
-//
-//    }
-//
+    @GetMapping("/{id}")
+    public ResponseEntity< AnswerResponseDTO > getOneAnswer( @PathVariable UUID id ) {
+
+        Answer answer = answerService.getOne( id )
+                .orElseThrow();
+
+        return ResponseEntity.status( HttpStatus.OK ).body( answerResponseDTO.createAnswerResponseDTO( answer ) );
+
+    }
+
     @PostMapping("/{id}")
     public ResponseEntity< AnswerResponseDTO > createAnswer( @PathVariable UUID id ,
                                                             @RequestHeader( "Authorization" ) String token ,
