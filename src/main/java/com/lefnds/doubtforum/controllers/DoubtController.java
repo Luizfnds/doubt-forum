@@ -21,10 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -37,23 +34,29 @@ public class DoubtController {
     private TokenService tokenService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private DoubtResponseDTO doubtResponseDTO;
 
     @GetMapping
     public ResponseEntity< Page<DoubtResponseDTO> > getAllDoubts( @PageableDefault( page = 0 , size = 5 , sort = "doubtDate" , direction = Sort.Direction.DESC ) Pageable pageable) {
 
         List< DoubtResponseDTO > doubtDtoList = doubtService.getAll( pageable )
-                .stream().map( ( doubt ) -> { return DoubtResponseDTO.builder()
-                                .doubtDate( doubt.getDoubtDate() )
-                                .nameOfUser( doubt.getUser().getName() )
-                                .title( doubt.getTitle() )
-                                .content( doubt.getContent() )
-                                .answers( doubt.getAnswers() )
-                                .build(); })
+                .stream().map( ( doubt ) -> { return doubtResponseDTO.createDoubtResponseDTO( doubt ); })
                 .toList();
 
         Page< DoubtResponseDTO > page = new PageImpl<>( doubtDtoList );
 
         return ResponseEntity.status( HttpStatus.OK ).body( page );
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity< DoubtResponseDTO > getOneDoubt( @PathVariable UUID id ) {
+
+        Doubt doubt = doubtService.getOne( id )
+                .orElseThrow();
+
+        return ResponseEntity.status( HttpStatus.OK ).body( doubtResponseDTO.createDoubtResponseDTO( doubt ) );
 
     }
 
@@ -65,25 +68,15 @@ public class DoubtController {
         User user = userRepository.findByEmail( username )
                 .orElseThrow();
 
-        Doubt doubt = Doubt.builder()
+        Doubt doubt = doubtService.save( Doubt.builder()
                 .doubtDate( LocalDateTime.now( ZoneId.of("UTC") ) )
                 .user( user )
                 .title( doubtRequestDTO.getTitle() )
                 .content( doubtRequestDTO.getContent() )
                 .answers( new ArrayList<>() )
-                .build();
+                .build() );
 
-        doubtService.save( doubt );
-
-        DoubtResponseDTO doubtResponseDTO = DoubtResponseDTO.builder()
-                .doubtDate( doubt.getDoubtDate() )
-                .nameOfUser( doubt.getUser().getName() )
-                .title( doubt.getTitle() )
-                .content( doubt.getContent() )
-                .answers( doubt.getAnswers() )
-                .build();
-
-        return ResponseEntity.status( HttpStatus.OK ).body( doubtResponseDTO );
+        return ResponseEntity.status( HttpStatus.OK ).body( doubtResponseDTO.createDoubtResponseDTO( doubt ) );
 
     }
 

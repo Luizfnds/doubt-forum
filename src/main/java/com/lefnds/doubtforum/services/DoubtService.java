@@ -8,6 +8,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class DoubtService {
 
@@ -17,6 +20,12 @@ public class DoubtService {
     public Page< Doubt > getAll( Pageable pageable ) {
 
         return doubtRepository.findAll( pageable );
+
+    }
+
+    public Optional< Doubt > getOne( UUID id ) {
+
+        return doubtRepository.findById( id );
 
     }
 
