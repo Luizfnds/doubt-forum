@@ -1,6 +1,5 @@
-package com.lefnds.doubtforum.dtos;
+package com.lefnds.doubtforum.dtos.response;
 
-import com.lefnds.doubtforum.model.Doubt;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

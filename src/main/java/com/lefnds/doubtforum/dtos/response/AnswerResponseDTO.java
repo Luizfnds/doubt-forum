@@ -1,4 +1,4 @@
-package com.lefnds.doubtforum.dtos;
+package com.lefnds.doubtforum.dtos.response;
 
 import com.lefnds.doubtforum.model.Answer;
 import lombok.AllArgsConstructor;

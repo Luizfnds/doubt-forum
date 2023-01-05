@@ -1,4 +1,4 @@
-package com.lefnds.doubtforum.dtos;
+package com.lefnds.doubtforum.dtos.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -1,9 +1,8 @@
 package com.lefnds.doubtforum.controllers;
 
-import com.lefnds.doubtforum.dtos.DoubtResponseDTO;
-import com.lefnds.doubtforum.dtos.UserRequestDTO;
-import com.lefnds.doubtforum.dtos.UserResponseDTO;
-import com.lefnds.doubtforum.model.Doubt;
+import com.lefnds.doubtforum.dtos.response.DoubtResponseDTO;
+import com.lefnds.doubtforum.dtos.request.UserRequestDTO;
+import com.lefnds.doubtforum.dtos.response.UserResponseDTO;
 import com.lefnds.doubtforum.model.User;
 import com.lefnds.doubtforum.repositories.UserRepository;
 import com.lefnds.doubtforum.security.auth.TokenService;

@@ -1,8 +1,7 @@
 package com.lefnds.doubtforum.controllers;
 
-import com.lefnds.doubtforum.dtos.DoubtRequestDTO;
-import com.lefnds.doubtforum.dtos.DoubtResponseDTO;
-import com.lefnds.doubtforum.dtos.UserRequestDTO;
+import com.lefnds.doubtforum.dtos.request.DoubtRequestDTO;
+import com.lefnds.doubtforum.dtos.response.DoubtResponseDTO;
 import com.lefnds.doubtforum.model.Doubt;
 import com.lefnds.doubtforum.model.User;
 import com.lefnds.doubtforum.repositories.UserRepository;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping( "/api/v1/doubt" )

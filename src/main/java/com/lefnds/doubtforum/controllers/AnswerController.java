@@ -1,9 +1,7 @@
 package com.lefnds.doubtforum.controllers;
 
-import com.lefnds.doubtforum.dtos.AnswerRequestDTO;
-import com.lefnds.doubtforum.dtos.AnswerResponseDTO;
-import com.lefnds.doubtforum.dtos.DoubtRequestDTO;
-import com.lefnds.doubtforum.dtos.DoubtResponseDTO;
+import com.lefnds.doubtforum.dtos.request.AnswerRequestDTO;
+import com.lefnds.doubtforum.dtos.response.AnswerResponseDTO;
 import com.lefnds.doubtforum.model.Answer;
 import com.lefnds.doubtforum.model.Doubt;
 import com.lefnds.doubtforum.model.User;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -88,34 +85,33 @@ public class AnswerController {
 
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity< Object > alterDoubt( @RequestHeader( "Authorization" ) String token ,
-//                                                @PathVariable UUID id ,
-//                                                @RequestBody @Valid DoubtRequestDTO doubtRequestDTO ) {
-//
-//        Doubt doubt = doubtService.getOne( id )
-//                .orElseThrow();
-//
-//        User user = userRepository.findByEmail( tokenService.getSubject( token ) )
-//                .orElseThrow();
-//
-//        List< UUID > doubtList = user.getDoubts().stream()
-//                .map( Doubt::getDoubtId )
-//                .filter( (u) -> u.equals( doubt.getDoubtId() ) )
-//                .toList();
-//
-//        if( doubtList.isEmpty() ) {
-//            return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).body( "This doubt does not belong to the logged in user." );
-//        }
-//
-//        doubt.setTitle( doubtRequestDTO.getTitle() );
-//        doubt.setContent( doubtRequestDTO.getContent() );
-//
-//        doubtService.save( doubt );
-//
-//        return ResponseEntity.status( HttpStatus.OK ).body( doubtResponseDTO.createDoubtResponseDTO( doubt ) );
-//
-//    }
+    @PutMapping("/{id}")
+    public ResponseEntity< Object > alterAnswer( @RequestHeader( "Authorization" ) String token ,
+                                                @PathVariable UUID id ,
+                                                @RequestBody @Valid AnswerRequestDTO answerRequestDTO ) {
+
+        Answer answer = answerService.getOne( id )
+                .orElseThrow();
+
+        User user = userRepository.findByEmail( tokenService.getSubject( token ) )
+                .orElseThrow();
+
+        boolean containsAnswerId = user.getAnswers().stream()
+                .map( Answer::getAnswerId )
+                .toList()
+                .contains(id);
+
+        if( !containsAnswerId ) {
+            return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).body( "This answer does not belong to the logged in user." );
+        }
+
+        answer.setContent( answerRequestDTO.getContent() );
+
+        answerService.save( answer );
+
+        return ResponseEntity.status( HttpStatus.OK ).body( answerResponseDTO.createAnswerResponseDTO( answer ) );
+
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity< String > deleteAnswer( @RequestHeader( "Authorization" ) String token ,
